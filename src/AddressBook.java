@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -165,9 +166,10 @@ public class AddressBook {
 		if (phoneNumber.length() > 12) {
 			int firstSpace = phoneNumber.indexOf(" ");
 			return "+" + phoneNumber.substring(0, firstSpace) + " (" 
-			+ phoneNumber.substring(firstSpace+1, firstSpace+4) + ") " + phoneNumber.substring(firstSpace+5, 			firstSpace+8) + "-" + phoneNumber.substring(firstSpace+9, firstSpace + 13);
+			+ phoneNumber.substring(firstSpace+1, firstSpace+4) + ") " + phoneNumber.substring(firstSpace+5, firstSpace+8)
+			+ "-" + phoneNumber.substring(firstSpace+9, firstSpace + 13);
 		} else {
-			return "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(4, 7) + "-" + 					phoneNumber.substring(8);
+			return "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(4, 7) + "-" + phoneNumber.substring(8);
  		}
 	}
 	
@@ -439,6 +441,8 @@ public class AddressBook {
 	private static void downloadContacts() {
 		BufferedReader br = null;
 		try { 
+			File contactFile = new File("Contacts.csv");
+			contactFile.createNewFile();
 			br = new BufferedReader(new FileReader("Contacts.csv"));
 			String line = "";
 			br.readLine();
