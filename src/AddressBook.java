@@ -3,7 +3,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -21,8 +20,6 @@ public class AddressBook {
 	//global scanner
 	private static Scanner input = new Scanner(System.in);
 	private static final String COMMA_DELIMITER = ",";
-	
-	private static AddressBookDB db;
 	
 	public static void main(String[] args) {
 		downloadContacts();
@@ -89,7 +86,7 @@ public class AddressBook {
 	//Possible menu options
 	private static void menuOptions() {
 		System.out.println("You may alter the Address Book in the following ways: ");
-		System.out.println("Press 0 (and enter) to quit the program(Your changes are only saved if you exit properly, which is this way).");
+		System.out.println("Press 0 (and enter) to quit the program(Your changes are already saved).");
 		System.out.println("Press 1 (and enter) to create a new contact.");
 		System.out.println("Press 2 (and enter) to update a contact.");
 		System.out.println("Press 3 (and enter) to delete a contact.");
@@ -415,29 +412,60 @@ public class AddressBook {
 	}
 
 	
-	//uploads contacts to Contacts.csv file, reads all contacts in order to make sure all updates and new 
+	//uploads contacts to Contacts.csv file, readds all contacts in order to make sure all updates and new 
 	//contacts are properly added.
 	private static void uploadContacts() {
+		BufferedWriter bw = null;
 		try {
-			db.setContacts(contactList);
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("There has been an error with the database");
+			bw = new BufferedWriter(new FileWriter("Contacts.csv"));
+			bw.write("FirstName,LastName,PhoneNumber,Address");
+			for (Contact contact: contactList) {
+				bw.newLine();
+				String contactInformation = contact.getFirstName() + "," + contact.getLastName() + "," 
+											+ contact.getPhoneNumber() + "," + contact.getAddress();
+				bw.write(contactInformation);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try { bw.close(); }
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+		return;
 	}
 	
 	
+	//Run at the beginning to get all the contacts from Cotnacts.csv and adds it to the contactList array list
 	private static void downloadContacts() {
-		try {
-			db = new AddressBookDB();
-			contactList = db.getContacts();
-		} catch (ClassNotFoundException e) {
-			System.out.println("Issue dececting class");
-		} catch (SQLException se) {
-			se.printStackTrace();
-			System.out.println("Issue with the SQL");
+		BufferedReader br = null;
+		try { 
+			File contactFile = new File("Contacts.csv");
+			contactFile.createNewFile();
+			br = new BufferedReader(new FileReader("Contacts.csv"));
+			String line = "";
+			br.readLine();
+			while((line = br.readLine()) != null) {
+				String[] contactInformation = line.split(COMMA_DELIMITER);
+				Contact contact = new Contact(contactInformation[0], contactInformation[1], 
+						contactInformation[2], contactInformation[3]);
+				
+				contactList.add(contact);
+			}
+			
+			//Sort arraylist
+			Collections.sort(contactList);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try { br.close(); } 
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		
 	}
 
 }
