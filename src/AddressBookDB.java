@@ -135,7 +135,7 @@ public class AddressBookDB {
 				connect.close();
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("An error has occured in the database.");
 		}
 	}
 
