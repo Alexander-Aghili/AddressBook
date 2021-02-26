@@ -1,6 +1,5 @@
 # AddressBook
-I have updated the Address Book on Febuary 26, 2021, without properly saving my previous work, and therefore Address Book I is no longer accessible.
-If you still need the work from Address Book I, contact me and I will recreate it promptly and put it on a seperate branch. 
+I have updated the Address Book on Febuary 26, 2021, without properly creating a new branch. Therefore, the main branch contains Address Book II and the Address-Book-I branch contains Address Book I. If you need to access address book I, change the branch to Address-Book-I
 Otherwise, the following changes are required in the AddressBookDB class to ensure it runs on your device:
 1. Alter the MySQL connection if required. Mine(the default) is set up as jdbc:mysql://localhost:3306/ but if this is not the proper connection, alter the text on line 54, and alter the text before ContactDB on line 68 and 100.
 2. Alter the username by changing the text in the username String variable on line 32.
